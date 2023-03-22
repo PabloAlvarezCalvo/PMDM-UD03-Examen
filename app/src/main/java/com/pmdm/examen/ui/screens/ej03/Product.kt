@@ -1,4 +1,4 @@
-package com.pmdm.examen
+package com.pmdm.examen.ui.screens.ej03
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
