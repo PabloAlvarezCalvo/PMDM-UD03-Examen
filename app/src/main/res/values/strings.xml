@@ -9,4 +9,5 @@
     <string name="incrementar">Incrementar</string>
     <string name="decrementar">Decrementar</string>
     <string name="anhadir">Añadir</string>
+    <string name="cerrar">Cerrar</string>
 </resources>

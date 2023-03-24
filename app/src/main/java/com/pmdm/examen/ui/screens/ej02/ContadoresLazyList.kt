@@ -9,14 +9,14 @@ import androidx.compose.ui.Modifier
 fun ContadoresLazyList(
     list: List<Contador>,
     incrementar: (Contador) -> Unit,
-    decrementar: (Contador) -> Unit
+    decrementar: (Contador) -> Unit,
     onRemoveItem: (Contador) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier) {
         items(items = list) { contador ->
-            ContadoresList(
-                contadorText = contador.nombre,
+            ContadoresListItem(
+                contador = contador,
                 incrementar = { incrementar(contador)},
                 decrementar = { decrementar(contador) },
                 onClose = { onRemoveItem(contador) }
@@ -24,14 +24,4 @@ fun ContadoresLazyList(
         }
 
     }
-}
-
-@Composable
-fun ContadoresList(
-    contadorText: String,
-    incrementar: () -> Unit,
-    decrementar: () -> Unit,
-    onClose: () -> Unit
-) {
-
 }
