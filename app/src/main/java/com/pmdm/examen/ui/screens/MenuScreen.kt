@@ -8,7 +8,9 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import com.pmdm.examen.R
 import com.pmdm.examen.ui.navigation.Screens
 
 
@@ -16,7 +18,7 @@ import com.pmdm.examen.ui.navigation.Screens
 fun MainScreen(navController: NavController){
     val scaffoldState = rememberScaffoldState()
     Scaffold(scaffoldState = scaffoldState,
-        topBar = {TopAppBar(title={Text(text = "Examen Ev2 - Pablo AC")})},
+        topBar = {TopAppBar(title={Text(text = stringResource(R.string.examenEstudiante))})},
         content = { paddingValues ->
             Column(
                 modifier = Modifier
@@ -26,10 +28,10 @@ fun MainScreen(navController: NavController){
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Button(onClick = { navController.navigate(route = Screens.Ejercicio01.route) }) {
-                    Text(text = "Ejercicio 01")
+                    Text(text = stringResource(R.string.ejercicio01))
                 }
                 Button(onClick = { navController.navigate(route = Screens.Ejercicio02.route) }) {
-                    Text(text = "Ejercicio 02")
+                    Text(text = stringResource(R.string.ejercicio02))
                 }
             }
         }

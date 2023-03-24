@@ -1,122 +1,112 @@
 package com.pmdm.examen.ui.screens.ej01
 
-import android.R
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.pmdm.examen.R
 
 @Composable
-fun Ej01Screen() {
-    var contador1 by rememberSaveable { mutableStateOf(0) }
-    var contador2 by rememberSaveable { mutableStateOf(0) }
-    var contadorGlobal by rememberSaveable { mutableStateOf(0) }
+@Preview
+fun Ej01Screen(){
+    var mostrarContadores by rememberSaveable{ mutableStateOf(false) }
+    var numeroContadores by rememberSaveable{ mutableStateOf(0) }
 
-    var incremento1 by rememberSaveable { mutableStateOf(1) }
-    var incremento2 by rememberSaveable { mutableStateOf(1) }
+    val focusManager = LocalFocusManager.current
 
-    var incrementoPrevio1 by rememberSaveable { mutableStateOf(1) }
-    var incrementoPrevio2 by rememberSaveable { mutableStateOf(1) }
+    var onMostrarClick = {
 
-    val incrementar1: () -> Unit = { contador1 += incremento1; contadorGlobal += incremento1 }
-    val incrementar2: () -> Unit = { contador2 += incremento2; contadorGlobal += incremento2 }
-    val modificarIncremento1: (Int) -> Unit = { incremento1 = it }
-    val modificarIncremento2: (Int) -> Unit = { incremento2 = it }
-    val modificarIncrementoPrevio1: (Int) -> Unit = { incrementoPrevio1 = it }
-    val modificarIncrementoPrevio2: (Int) -> Unit = { incrementoPrevio2 = it }
-    val borrar1: () -> Unit = { contador1 = 0 }
-    val borrar2: () -> Unit = { contador2 = 0 }
+    }
+    var onValueContadoresChange = {}
 
-    Column(
-        Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly,
-    ) {
-        Contador(contador1, incremento1, incrementar1, modificarIncremento1, borrar1, incrementoPrevio1, modificarIncrementoPrevio1)
 
-        Contador(contador2, incremento2, incrementar2, modificarIncremento2, borrar2, incrementoPrevio2, modificarIncrementoPrevio2)
-
-        Row() {
-            Text(text = "Global $contadorGlobal")
-            Icon(painterResource(
-                id = android.R.drawable.ic_menu_delete
-            ),
-                contentDescription = "Icono borrar",
-                modifier = Modifier.clickable { contadorGlobal = 0 }
-            )
+    val scaffoldState = rememberScaffoldState()
+    Scaffold(scaffoldState = scaffoldState,
+        topBar = { TopAppBar(title={ Text(text = "Contadores") }) },
+        content = { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                if (mostrarContadores) {
+                    PantallaContadores(numeroContadores, )
+                } else {
+                    DefinirContadores(numeroContadores, onMostrarClick, onValueContadoresChange, Modifier)
+                }
+            }
         }
+    )
+}
+
+@Composable
+fun PantallaContadores(
+    cantidadContadores: Int,
+) {
+    //var listaContadores by rememberSaveable{ mutableListOf(List<Int>) }
+    var listaContadores = List(cantidadContadores) { _ -> 0 }
+    val saveLista = rememberSaveable { mutableListOf(listaContadores) }
+
+    //val incrementar: () -> Unit = { contador1 += incremento1; contadorGlobal += incremento1 }
+
+    Column(modifier = Modifier.fillMaxSize()) {
+        for (i in 0 until cantidadContadores - 1) {
+            BloqueContador(listaContadores.get(i), Unit, Unit)
+        }
+    }
+
+}
+
+@Composable
+fun BloqueContador(
+    valor: Int,
+    incrementar: Unit,
+    decrementar: Unit,
+
+    ) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(20.dp),
+        horizontalArrangement = Arrangement.Center,
+    ){
+        Button(onClick = { incrementar } ){Text(text= stringResource(R.string.incrementar))}
+        Text(text = "$valor")
+        Button(onClick = { decrementar }){Text(text= stringResource(R.string.decrementar))}
     }
 }
 
 @Composable
-fun Contador(
-    contadorLocal: Int,
-    incremento: Int,
+fun DefinirContadores(
+    cantidadContadores: Int,
     onClick: () -> Unit,
-    onValueChange: (Int) -> Unit,
-    borrar: () -> Unit,
-    incrementoPrevio: Int,
-    modificarIncrementoPrevio : (Int) -> Unit
-
+    onValueChange: () -> Unit,
+    modifier: Modifier
 ) {
-    val focusManager = LocalFocusManager.current
+    var text by remember { mutableStateOf("") }
+    Column(modifier = modifier
+        .fillMaxSize()
+        .padding(20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ){
+        OutlinedTextField(
+            value = text,
+            onValueChange = { text = it },
+            placeholder = { stringResource(R.string.tfNumeroContadoresPlaceholder)},
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        )
 
-    Column(
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Button(
-                onClick = { onClick(); focusManager.clearFocus() },
-                enabled = incremento != 0
-            ) {
-                Text("Contador 1 ($contadorLocal)")
-            }
-            Text(text = "$contadorLocal", fontSize = 32.sp)
-            Icon(painterResource(
-                id = android.R.drawable.ic_menu_delete
-            ),
-                contentDescription = "Icono borrar",
-                modifier = Modifier.clickable { borrar() }
-            )
-
-        }
-        Row() {
-            Text(text = "Incremento:")
-            OutlinedTextField(
-                modifier = Modifier.onFocusChanged { onValueChange(incrementoPrevio) },
-                value = incremento.toString(),
-                onValueChange = {
-                    if (it.isNotBlank()) {
-                        onValueChange(it.toInt())
-                    } else {
-                        onValueChange(incrementoPrevio)
-                    }
-
-                    modificarIncrementoPrevio(it.toInt())
-                },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-
-                )
-        }
+        Button(onClick = onClick) { Text(text = stringResource(R.string.mostrar)) }
     }
 }
