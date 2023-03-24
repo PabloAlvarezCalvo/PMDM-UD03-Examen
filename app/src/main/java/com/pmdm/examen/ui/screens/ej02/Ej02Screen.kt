@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pmdm.examen.R
 
 @Composable
@@ -23,7 +24,9 @@ fun Ej02Screen(){
 
 @Composable
 fun ListaCompraContadores(){
+    val viewModel: ListaContadoresViewmodel = viewModel()
     var text by remember { mutableStateOf("") }
+
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier.fillMaxSize(),
@@ -32,12 +35,6 @@ fun ListaCompraContadores(){
             TextField(value = text, onValueChange = { text = it })
             Button(onClick = {}) { Text(text = stringResource(R.string.anhadir))}
         }
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ){
-            
-        }
+        ContadoresLazyList()
     }
 }
