@@ -14,6 +14,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.sp
 import com.pmdm.examen.R
 import com.pmdm.examen.ui.screens.ej02.Contador
 import com.pmdm.examen.ui.screens.ej02.ListaContadoresViewmodel
@@ -24,12 +27,30 @@ fun Ej01Screen() {
     var mostrarContadores by rememberSaveable { mutableStateOf(false) }
     var numeroContadores by rememberSaveable { mutableStateOf(0) }
 
-    val onMostrarClick: (Int) -> Unit = { numeroContadores = it }
+    val focusManager = LocalFocusManager.current
+
+    val onMostrarClick: (Int) -> Unit = {
+        numeroContadores = it;
+        mostrarContadores = true;
+        focusManager.clearFocus();
+    }
 
 
     val scaffoldState = rememberScaffoldState()
     Scaffold(scaffoldState = scaffoldState,
-        topBar = { TopAppBar(title = { Text(text = "Contadores") }) },
+        topBar = {TopAppBar(
+                title = { Text(text = "Contadores") },
+            actions = {
+                if (mostrarContadores) {
+                    Button(onClick = { numeroContadores = 0; mostrarContadores = false; }) {
+                        Icon(
+                            painter = painterResource(id = android.R.drawable.ic_menu_revert),
+                            contentDescription = stringResource(R.string.reiniciarContadores)
+                        )
+                    }
+                }
+            }
+            )},
         content = { paddingValues ->
             Column(
                 modifier = Modifier
@@ -48,62 +69,4 @@ fun Ej01Screen() {
     )
 }
 
-@Composable
-fun PantallaContadores(
-    cantidadContadores: Int,
-) {
-    val viewModel: ListaContadoresViewmodel = viewModel()
-    for (i in 1..cantidadContadores) {
-        viewModel.addContador("$i")
-    }
 
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        items(items = viewModel.listaContadores) { contador ->
-            BloqueContador(contador)
-        }
-    }
-
-}
-
-@Composable
-fun BloqueContador(
-    contador: Contador
-
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp),
-        horizontalArrangement = Arrangement.Center,
-    ) {
-        Button(onClick = { contador.incrementar(1) }) { Text(text = stringResource(R.string.incrementar)) }
-        Text(text = "${contador.valor}")
-        Button(onClick = { contador.decrementar(1) }) { Text(text = stringResource(R.string.decrementar)) }
-    }
-}
-
-@Composable
-fun DefinirContadores(
-    onClick: (Int) -> Unit,
-    modifier: Modifier
-) {
-    var text by remember { mutableStateOf("") }
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
-    ) {
-        OutlinedTextField(
-            value = text,
-            onValueChange = { text = it },
-            placeholder = { stringResource(R.string.tfNumeroContadoresPlaceholder) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        )
-
-        Button(
-            onClick = { onClick(text.toInt()) }
-        ) { Text(text = stringResource(R.string.mostrar)) }
-    }
-}

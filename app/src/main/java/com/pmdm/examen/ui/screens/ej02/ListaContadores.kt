@@ -15,9 +15,9 @@ fun ListaCompraContadores(){
     val viewModel: ListaContadoresViewmodel = viewModel()
     var text by remember { mutableStateOf("") }
 
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(modifier = Modifier.fillMaxSize()) {
         Row(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().weight(1f),
             horizontalArrangement = Arrangement.Center,
         ){
             TextField(value = text, onValueChange = { text = it })
@@ -25,9 +25,8 @@ fun ListaCompraContadores(){
         }
         ContadoresLazyList(
             list = viewModel.listaContadores,
-            incrementar = {viewModel.incrementarContador(it, 1)},
-            decrementar = {viewModel.decrementarContador(it, 1)},
             onRemoveItem = { viewModel.removeContador(it) },
+            modifier = Modifier.fillMaxSize().weight(10f)
         )
     }
 }

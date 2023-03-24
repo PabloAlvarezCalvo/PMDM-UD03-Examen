@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.pmdm.examen.R
 
@@ -11,7 +12,10 @@ import com.pmdm.examen.R
 fun Ej02Screen(){
     val scaffoldState = rememberScaffoldState()
     Scaffold(scaffoldState = scaffoldState,
-        topBar = { TopAppBar(title = { Text(stringResource(R.string.contadores)) }) },
+        topBar = { TopAppBar(title = { Text(stringResource(R.string.contadores)) },
+            actions = {
+                Text(text = "Global: ")
+            }) },
         content = {
                 padding -> Modifier.padding(padding)
             ListaCompraContadores()

@@ -5,8 +5,9 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 
 class ListaContadoresViewmodel : ViewModel() {
-    //private val _listaContadores = mutableStateListOf<Contador>()
-    private val _listaContadores = generarListaContadores().toMutableStateList()
+    private val _listaContadores = mutableStateListOf<Contador>()
+    //Intento para conseguir mostrar algo
+    //private val _listaContadores = generarListaContadores().toMutableStateList()
     val listaContadores get() = _listaContadores
 
     fun addContador(nombre : String) =

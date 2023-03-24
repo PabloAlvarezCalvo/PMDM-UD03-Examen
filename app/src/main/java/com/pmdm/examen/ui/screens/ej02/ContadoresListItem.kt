@@ -5,6 +5,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -13,8 +14,6 @@ import com.pmdm.examen.R
 @Composable
 fun ContadoresListItem(
     contador: Contador,
-    incrementar: () -> Unit,
-    decrementar: () -> Unit,
     onClose: () -> Unit
 ) {
     Row(
@@ -28,18 +27,23 @@ fun ContadoresListItem(
             backgroundColor = MaterialTheme.colors.secondary,
             elevation = 8.dp
         ) {
-            Text(text = contador.nombre)
-            Text(text = contador.valor.toString())
-            Column() {
-                Button(onClick = { incrementar }) {
-                    Text(text = "^")
+            Row(modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = contador.nombre)
+                Text(text = contador.valor.toString())
+                Column() {
+                    Button(onClick = { contador.incrementar(1) }) {
+                        Text(text = "^")
+                    }
+                    Button(onClick = { contador.decrementar(1) }) {
+                        Text(text = "v")
+                    }
                 }
-                Button(onClick = { decrementar }) {
-                    Text(text = "v")
+                IconButton(onClick = onClose) {
+                    Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.cerrar))
                 }
-            }
-            IconButton(onClick = onClose) {
-                Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.cerrar))
             }
         }
 
